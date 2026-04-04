@@ -1,0 +1,293 @@
+<html lang="ar" dir="rtl"><head>
+<script id="codepen-helper" src="https://public.codepenassets.com/preview/index.3d9807ba2f99c7cd6285a0bb14172f.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المشغل الاحترافي - بدون إعلانات</title>
+    <style>
+        :root {
+            --primary: #ff0055;
+            --bg-color: #0f0f13;
+            --glass-bg: rgba(25, 25, 30, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at top right, #2a0815, #0f0f13 40%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            background: linear-gradient(to right, #fff, #ffb3c6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #a0a0b0;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+        }
+
+        button {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 0 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
+        }
+
+        button:hover {
+            background: #e6004c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
+        }
+
+        .player-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            display: none;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .player-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 2;
+        }
+
+        /* Loading Spinner */
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .error {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff4c4c;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* للموبايل */
+        @media (max-width: 600px) {
+            .input-wrapper {
+                flex-direction: column;
+            }
+            button {
+                padding: 16px;
+            }
+            .app-container {
+                padding: 20px;
+            }
+        }
+    </style>
+<style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style></head>
+<body>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>مشغل يوتيوب الاحترافي</h1>
+            <p>تجربة مشاهدة سينمائية، بدون إعلانات أو تتبع</p>
+        </div>
+        
+        <div class="input-wrapper">
+            <input type="text" id="ytInput" placeholder="الصق رابط الفيديو أو الـ Shorts هنا..." autocomplete="off">
+            <button onclick="processLink()" id="playBtn">تشغيل الآن</button>
+        </div>
+        
+        <div id="statusMsg" class="message error"></div>
+        
+        <div class="player-wrapper" id="playerContainer">
+            <div class="loader" id="loader"></div>
+            <iframe id="videoIframe" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        // دالة لتحويل صيغة الوقت (مثال: 1m30s) لثواني صافية عشان المشغل يفهمها
+        function parseTime(timeString) {
+            if (!timeString) return 0;
+            if (!isNaN(timeString)) return parseInt(timeString); // لو هي ثواني جاهزة
+            
+            let totalSeconds = 0;
+            const hours = timeString.match(/(\d+)h/i);
+            const minutes = timeString.match(/(\d+)m/i);
+            const seconds = timeString.match(/(\d+)s/i);
+
+            if (hours) totalSeconds += parseInt(hours[1]) * 3600;
+            if (minutes) totalSeconds += parseInt(minutes[1]) * 60;
+            if (seconds) totalSeconds += parseInt(seconds[1]);
+
+            return totalSeconds;
+        }
+
+        function processLink() {
+            const input = document.getElementById('ytInput').value.trim();
+            const playerContainer = document.getElementById('playerContainer');
+            const iframe = document.getElementById('videoIframe');
+            const statusMsg = document.getElementById('statusMsg');
+            const loader = document.getElementById('loader');
+
+            if (!input) {
+                showError("يا ريت تحط لينك الأول عشان نقدر نشغله!");
+                return;
+            }
+
+            // خوارزمية استخراج الـ ID قوية جداً بتغطي كل أنواع الروابط
+            const idRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=|shorts\/)|youtu\.be\/)([^"&?\/\s]{11})/i;
+            const timeRegex = /[?&](?:t|start)=([a-zA-Z0-9]+)/i;
+
+            const idMatch = input.match(idRegex);
+            const timeMatch = input.match(timeRegex);
+
+            if (idMatch && idMatch[1]) {
+                const videoId = idMatch[1];
+                let startTime = 0;
+
+                // لو اللينك فيه وقت معين، نستخرجه
+                if (timeMatch && timeMatch[1]) {
+                    startTime = parseTime(timeMatch[1]);
+                }
+
+                // بناء الرابط الاحترافي
+                // rel=0: منع الفيديوهات المقترحة من قنوات تانية في نهاية الفيديو
+                // modestbranding=1: إخفاء لوجو يوتيوب قدر الإمكان
+                // iv_load_policy=3: إخفاء التوضيحات (Annotations) على الفيديو
+                const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&start=${startTime}`;
+
+                // تظبيط الواجهة للتحميل
+                statusMsg.style.display = 'none';
+                playerContainer.style.display = 'block';
+                iframe.style.opacity = '0'; // نخفي الفريم لحظياً
+                loader.style.display = 'block';
+
+                // لما الفيديو يحمل جوه الفريم، نظهره ونخفي الـ Loader
+                iframe.onload = function() {
+                    loader.style.display = 'none';
+                    iframe.style.transition = "opacity 0.5s ease";
+                    iframe.style.opacity = '1';
+                };
+
+                // تشغيل الرابط
+                iframe.src = embedUrl;
+
+            } else {
+                showError("اللينك ده مش مظبوط، اتأكد إنك واخد رابط يوتيوب صالح (فيديو عادي أو Shorts).");
+                playerContainer.style.display = 'none';
+                iframe.src = "";
+            }
+        }
+
+        function showError(msg) {
+            const statusMsg = document.getElementById('statusMsg');
+            statusMsg.textContent = msg;
+            statusMsg.className = "message error";
+            statusMsg.style.display = 'block';
+        }
+
+        // عشان لو داس Enter في الكيبورد يشغل على طول
+        document.getElementById('ytInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                processLink();
+            }
+        });
+    </script>
+
+</body></html>
